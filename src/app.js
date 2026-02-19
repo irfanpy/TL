@@ -38,8 +38,16 @@ app.use(
 app.options("*", cors());
 app.use(express.json());
 
+app.get("/", (_req, res) => {
+  res.status(200).json({ status: "ok", service: "teraleads-backend" });
+});
+
 app.get("/health", (_req, res) => {
   res.json({ status: "ok" });
+});
+
+app.get("/favicon.ico", (_req, res) => {
+  res.status(204).end();
 });
 
 app.use("/auth", authRoutes);
