@@ -6,7 +6,36 @@ import chatRoutes from "./routes/chat.js";
 
 const app = express();
 
-app.use(cors());
+const configuredOrigins = (process.env.CORS_ORIGINS || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+const defaultOrigins = [
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+  "https://dental-assistant-six.vercel.app",
+];
+
+const allowedOrigins = new Set([
+  ...defaultOrigins,
+  ...configuredOrigins,
+]);
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.has(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error("CORS not allowed for this origin"));
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
+app.options("*", cors());
 app.use(express.json());
 
 app.get("/health", (_req, res) => {
