@@ -15,8 +15,14 @@ if (!databaseUrl) {
       family: 4,
     };
 
-    if (/sslmode=require/i.test(databaseUrl)) {
-      poolConfig.ssl = { rejectUnauthorized: false };
+    const needsSsl = /sslmode=require/i.test(databaseUrl)
+      || /supabase\.co/i.test(databaseUrl);
+
+    const allowSelfSigned = String(process.env.DB_SSL_ALLOW_SELF_SIGNED || "true")
+      .toLowerCase() === "true";
+
+    if (needsSsl) {
+      poolConfig.ssl = { rejectUnauthorized: !allowSelfSigned ? true : false };
     }
 
     pool = new Pool(poolConfig);
