@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { query } from "./src/db/index.js";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 const SAMPLE_PATIENTS = [
   { name: "Alice Johnson", email: "alice@example.com", phone: "555-0001", dob: "1985-03-15", medicalNotes: "Regular checkup needed" },
