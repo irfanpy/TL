@@ -12,6 +12,7 @@ if (!databaseUrl) {
   try {
     const poolConfig = {
       connectionString: databaseUrl,
+      family: 4,
     };
 
     if (/sslmode=require/i.test(databaseUrl)) {
